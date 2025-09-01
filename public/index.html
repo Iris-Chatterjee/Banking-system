@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <div class="login-container">
+                <div class="bank-logo">
+                    <i class="fas fa-university"></i>
+                    <h1>SecureBank</h1>
+                </div>
+                <form id="loginForm" class="login-form">
+                    <h2>Login to Your Account</h2>
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number</label>
+                        <input type="text" id="accountNumber" name="accountNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                <div class="register-link">
+                    <p>Don't have an account? <a href="#" onclick="showRegisterPage()">Register here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Page -->
+        <div id="registerPage" class="page">
+            <div class="register-container">
+                <div class="bank-logo">
+                    <i class="fas fa-university"></i>
+                    <h1>SecureBank</h1>
+                </div>
+                <form id="registerForm" class="register-form">
+                    <h2>Create New Account</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="accountType">Account Type</label>
+                            <select id="accountType" name="accountType" required>
+                                <option value="">Select Account Type</option>
+                                <option value="savings">Savings Account</option>
+                                <option value="current">Current Account</option>
+                                <option value="fixed">Fixed Deposit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="initialDeposit">Initial Deposit (₹)</label>
+                            <input type="number" id="initialDeposit" name="initialDeposit" min="100" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Create Account</button>
+                </form>
+                <div class="login-link">
+                    <p>Already have an account? <a href="#" onclick="showLoginPage()">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <i class="fas fa-university"></i>
+                    <h1>SecureBank Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <span id="userWelcome">Welcome, User</span>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </header>
+
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="#" onclick="showSection('overview')" class="nav-link active">Overview</a></li>
+                    <li><a href="#" onclick="showSection('accounts')" class="nav-link">Accounts</a></li>
+                    <li><a href="#" onclick="showSection('transfer')" class="nav-link">Transfer Money</a></li>
+                    <li><a href="#" onclick="showSection('transactions')" class="nav-link">Transaction History</a></li>
+                    <li><a href="#" onclick="showSection('profile')" class="nav-link">Profile</a></li>
+                </ul>
+            </nav>
+
+            <main class="dashboard-content">
+                <!-- Overview Section -->
+                <section id="overviewSection" class="content-section active">
+                    <h2>Account Overview</h2>
+                    <div class="cards-container">
+                        <div class="balance-card">
+                            <div class="card-header">
+                                <h3>Current Balance</h3>
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="balance-amount" id="currentBalance">$0.00</p>
+                                <p class="account-info">Account: <span id="displayAccountNumber">****1234</span></p>
+                            </div>
+                        </div>
+                        <div class="quick-actions-card">
+                            <div class="card-header">
+                                <h3>Quick Actions</h3>
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="card-content">
+                                <button onclick="showSection('transfer')" class="action-btn">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Transfer Money
+                                </button>
+                                <button onclick="showDepositModal()" class="action-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Deposit
+                                </button>
+                                <button onclick="showWithdrawModal()" class="action-btn">
+                                    <i class="fas fa-minus"></i>
+                                    Withdraw
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-transactions">
+                        <h3>Recent Transactions</h3>
+                        <div id="recentTransactionsList">
+                            <!-- Recent transactions will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Accounts Section -->
+                <section id="accountsSection" class="content-section">
+                    <h2>My Accounts</h2>
+                    <div id="accountsList">
+                        <!-- Account details will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Transfer Section -->
+                <section id="transferSection" class="content-section">
+                    <h2>Transfer Money</h2>
+                    <div class="transfer-container">
+                        <form id="transferForm" class="transfer-form">
+                            <div class="form-group">
+                                <label for="transferAmount">Amount ($)</label>
+                                <input type="number" id="transferAmount" name="transferAmount" min="1" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipientAccount">Recipient Account Number</label>
+                                <input type="text" id="recipientAccount" name="recipientAccount" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transferDescription">Description</label>
+                                <input type="text" id="transferDescription" name="transferDescription" placeholder="Payment description">
+                            </div>
+                            <button type="submit" class="btn-primary">Transfer Money</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Transactions Section -->
+                <section id="transactionsSection" class="content-section">
+                    <h2>Transaction History</h2>
+                    <div class="transactions-container">
+                        <div class="transaction-filters">
+                            <select id="transactionFilter">
+                                <option value="all">All Transactions</option>
+                                <option value="deposit">Deposits</option>
+                                <option value="withdrawal">Withdrawals</option>
+                                <option value="transfer">Transfers</option>
+                            </select>
+                            <input type="date" id="dateFilter" class="date-filter">
+                        </div>
+                        <div id="transactionsList">
+                            <!-- Transaction history will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profileSection" class="content-section">
+                    <h2>Profile Settings</h2>
+                    <div class="profile-container">
+                        <form id="profileForm" class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileFirstName">First Name</label>
+                                    <input type="text" id="profileFirstName" name="profileFirstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileLastName">Last Name</label>
+                                    <input type="text" id="profileLastName" name="profileLastName" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail" name="profileEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Phone</label>
+                                <input type="tel" id="profilePhone" name="profilePhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileAddress">Address</label>
+                                <textarea id="profileAddress" name="profileAddress" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Update Profile (customar)</button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('depositModal')">&times;</span>
+            <h3>Deposit Money</h3>
+            <form id="depositForm">
+                <div class="form-group">
+                    <label for="depositAmount">Amount ($)</label>
+                    <input type="number" id="depositAmount" name="depositAmount" min="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositDescription">Description</label>
+                    <input type="text" id="depositDescription" name="depositDescription" placeholder="Deposit description">
+                </div>
+                <button type="submit" class="btn-primary">Deposit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('withdrawModal')">&times;</span>
+            <h3>Withdraw Money</h3>
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label for="withdrawAmount">Amount ($)</label>
+                    <input type="number" id="withdrawAmount" name="withdrawAmount" min="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="withdrawDescription">Description</label>
+                    <input type="text" id="withdrawDescription" name="withdrawDescription" placeholder="Withdrawal description">
+                </div>
+                <button type="submit" class="btn-primary">Withdraw</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
