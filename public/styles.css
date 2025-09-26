@@ -1447,6 +1447,64 @@ body {
     border: 1px solid rgba(var(--color-error-rgb), var(--status-border-opacity));
 }
 
+
+/* extra  */
+
+.customer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        .customer-table th, .customer-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .customer-table th {
+            background-color: #f7f9fc;
+            font-weight: 600;
+        }
+        .customer-table tbody tr:hover {
+            background-color: #f1f5fe;
+        }
+
+        /* Styles for the new button on the login page */
+        .login-container .btn-secondary {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            background-color: #6c757d;
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-container .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Make the customer list modal wider */
+        .modal-content.large {
+            max-width: 1000px;
+        }
+        
+        /* Styles for the account creation success modal */
+        .account-number-display-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border: 1px solid #ccc;
+        }
+        .account-number-display-container strong {
+            font-size: 1.2rem;
+            font-family: monospace;
+        }
+
 /* Animations */
 @keyframes fadeIn {
     from {

@@ -151,8 +151,16 @@ async function handleLogin(e) {
         const result = await response.json();
         
         if (response.ok) {
+            // --- FIX IS HERE ---
+            // Assign the user object from the response
             currentUser = result.user;
+            // Attach the separate token property to your currentUser object
+            currentUser.token = result.token;
+
+            // Now, save the complete object (with the token) to localStorage
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            // --- END OF FIX ---
+
             showSuccessMessage('Login successful!');
             setTimeout(() => {
                 showDashboard();
@@ -245,7 +253,7 @@ async function loadOverviewData() {
 
         if (balanceResponse.ok) {
             const balanceData = await balanceResponse.json();
-            document.getElementById('currentBalance').textContent = `$${balanceData.balance.toFixed(2)}`;
+            document.getElementById('currentBalance').textContent = `$${parseFloat(balanceData.balance).toFixed(2)}`;
         }
 
         // Display account number (masked)
@@ -330,7 +338,7 @@ function displayAccountInfo(account) {
         <div class="account-item">
             <div class="account-header">
                 <div class="account-type">${account.account_type} Account</div>
-                <div class="account-balance">$${account.balance.toFixed(2)}</div>
+                <div class="account-balance">$${parseFloat(account.balance).toFixed(2)}</div>
             </div>
             <div class="account-details">
                 <p><strong>Account Number:</strong> ${account.account_number}</p>
@@ -381,7 +389,8 @@ function displayTransactions(transactions) {
                 ${transaction.recipient_account ? `<p>To: ${transaction.recipient_account}</p>` : ''}
             </div>
             <div class="transaction-amount ${transaction.type === 'deposit' ? 'credit' : 'debit'}">
-                ${transaction.type === 'deposit' ? '+' : '-'}$${transaction.amount.toFixed(2)}
+                
+                ${transaction.type === 'deposit' ? '+' : '-'}$${parseFloat(transaction.amount).toFixed(2)}
             </div>
         </div>
     `).join('');
@@ -559,9 +568,15 @@ async function handleProfileUpdate(e) {
     }
 }
 
+
 // Modal functions
 function showDepositModal() {
     document.getElementById('depositModal').style.display = 'block';
+}
+
+function showCustomerInfoModal() {
+    document.getElementById('customerInfoModal').style.display = 'block';
+    loadAllCustomerData(); // Fetch data only when the modal is opened
 }
 
 function showWithdrawModal() {
@@ -638,6 +653,44 @@ function formatCurrency(amount) {
 function validateAccountNumber(accountNumber) {
     return /^\\d{10,12}$/.test(accountNumber);
 }
+
+async function loadAllCustomerData() {
+    // Target the tbody inside the new modal
+    const customerListBody = document.getElementById('customerListModal');
+    customerListBody.innerHTML = '<tr><td colspan="5">Loading customer data...</td></tr>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/users`);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch customer data.');
+        }
+
+        const customers = await response.json();
+
+        if (customers.length === 0) {
+            customerListBody.innerHTML = '<tr><td colspan="5">No customers found.</td></tr>';
+            return;
+        }
+
+        const customersHTML = customers.map(customer => `
+            <tr>
+                <td>${customer.first_name} ${customer.last_name}</td>
+                <td>${customer.account_number}</td>
+                <td>${customer.email}</td>
+                <td>${customer.phone}</td>
+                <td>${customer.address}</td>
+            </tr>
+        `).join('');
+
+        customerListBody.innerHTML = customersHTML;
+
+    } catch (error) {
+        console.error('Error loading customer data:', error);
+        customerListBody.innerHTML = `<tr><td colspan="5" style="color: red;">Error loading data. Please check the console.</td></tr>`;
+    }
+}
+
 
 // Close modals when clicking outside
 window.onclick = function(event) {

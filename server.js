@@ -555,6 +555,27 @@ app.get('/api/transactions/:accountNumber', authenticateToken, async (req, res) 
     }
 });
 
+app.get('/api/users', async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                first_name, 
+                last_name, 
+                account_number, 
+                email, 
+                phone, 
+                address 
+            FROM users 
+            ORDER BY id ASC
+        `;
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching all users:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // User management routes
 app.put('/api/users/:accountNumber', authenticateToken, async (req, res) => {
     try {
